@@ -31,29 +31,23 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
 
- presenter = ListPresenter.create()
-                .addViewBinder(Integer.class.hashCode(), new SimpleViewBound(BR.data, R.layout.item_main) {
-
-                    @Override
-                    public void bindItem(DataBoundViewHolder holder, Object item) {
-                        item = item + "";
-                        super.bindItem(holder, item);
-                    }
-
-                })
+        presenter = ListPresenter.<String>create()
                 .addViewBinder(String.class.hashCode(), new SimpleViewBound(BR.data, R.layout.item_main))
-                .diffCallback(new ListPresenter.DiffCallback<Object>() {
+                .diffCallback(new ListPresenter.DiffCallback<String>() {
+
                     @Override
-                    public boolean areItemsTheSame(Object oldItemPosition, Object newItemPosition) {
-                        return oldItemPosition  .equals(newItemPosition);
+                    public boolean areItemsTheSame(String s, String t1) {
+                        return s.equals(t1);
                     }
 
                     @Override
-                    public boolean areContentsTheSame(Object oldItemPosition, Object newItemPosition) {
-                       return oldItemPosition  .equals(newItemPosition);
+                    public boolean areContentsTheSame(String s, String t1) {
+                        return s.equals(t1);
                     }
                 })
                 .attachWithBound(recyclerView);
+
+        presenter.display(list);
 
 
 

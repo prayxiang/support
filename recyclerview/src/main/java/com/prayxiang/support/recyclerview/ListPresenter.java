@@ -158,9 +158,9 @@ public class ListPresenter<T>  implements ListUpdateCallback{
     }
 
     public  interface DiffCallback<T>{
-        boolean areItemsTheSame(T oldItemPosition, T newItemPosition);
+        boolean areItemsTheSame(T oldItem, T newItem);
 
-        boolean areContentsTheSame(T oldItemPosition, T newItemPosition);
+        boolean areContentsTheSame(T oldItem, T newItem);
 
     }
 
