@@ -14,7 +14,7 @@ import java.util.List;
  * Created by xianggaofeng on 2018/3/1.
  */
 
-public class ListPresenter<T>  implements ListUpdateCallback{
+public class ListPresenter<T>  implements ListUpdateCallback  {
     TypeProvider mPool = new TypeProvider();
 
     final  static TypeStrategy sDefaultTypeStrategy = new TypeStrategy() {
@@ -89,6 +89,27 @@ public class ListPresenter<T>  implements ListUpdateCallback{
             new DiffAsyncTask<>(this).execute(oldItems, list);
         }
     }
+
+
+    public void insert(List<T> list){
+        insert(items.size(),list);
+    }
+    public void insert(int position, List<T> list){
+        if(list==null||list.size()==0){
+            return;
+        }
+        items.add(position,list);
+        onInserted(position,list.size());
+    }
+
+    public void insert(T t){
+        insert(items.size(),t);
+    }
+    public void insert(int position, T t){
+        items.add(position,t);
+        onInserted(position,1);
+    }
+
 
     public void setItems(List<T> items) {
         this.items = (List<Object>) items;
