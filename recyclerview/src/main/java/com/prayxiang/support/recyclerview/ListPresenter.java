@@ -14,10 +14,10 @@ import java.util.List;
  * Created by xianggaofeng on 2018/3/1.
  */
 
-public class ListPresenter<T>  implements ListUpdateCallback  {
+public class ListPresenter<T> implements ListUpdateCallback {
     TypeProvider mPool = new TypeProvider();
 
-    final  static TypeStrategy sDefaultTypeStrategy = new TypeStrategy() {
+    final static TypeStrategy sDefaultTypeStrategy = new TypeStrategy() {
         @Override
         public int getItemViewType(Object item) {
             return item.getClass().hashCode();
@@ -32,8 +32,8 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
         return mPool.findViewBinder(viewType);
     }
 
-    public int getItemViewType(int  position) {
-       return mTypeStrategy.getItemViewType(items.get(position));
+    public int getItemViewType(int position) {
+        return mTypeStrategy.getItemViewType(items.get(position));
     }
 
     public int getItemCount() {
@@ -45,32 +45,32 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
     }
 
     public void addOnListChangeCallback(ListUpdateCallback callback) {
-        if(callbacks==null){
+        if (callbacks == null) {
             callbacks = new ArrayList<>();
         }
         callbacks.add(callback);
     }
 
     public void removeListChangeCallback(ListUpdateCallback callback) {
-        if(callbacks!=null){
+        if (callbacks != null) {
             callbacks.remove(callback);
         }
     }
 
 
     public boolean areItemsTheSame(T oldItem, T newItem) {
-        if(mDiffCallback !=null){
-            return mDiffCallback.areItemsTheSame(oldItem,newItem);
+        if (mDiffCallback != null) {
+            return mDiffCallback.areItemsTheSame(oldItem, newItem);
         }
         return false;
     }
 
     public boolean areContentsTheSame(T oldItem, T newItem) {
-        if(mDiffCallback !=null) {
+        if (mDiffCallback != null) {
 
-            return mDiffCallback.areContentsTheSame(oldItem,newItem);
+            return mDiffCallback.areContentsTheSame(oldItem, newItem);
         }
-            return false;
+        return false;
     }
 
 
@@ -81,83 +81,86 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
         }
 
         setItems(list);
-        if(oldItems.size()==0){
-            onInserted(0,list.size());
-        }else if(list.size()==0){
-            onRemoved(0,oldItems.size());
-        }else {
+        if (oldItems.size() == 0) {
+            onInserted(0, list.size());
+        } else if (list.size() == 0) {
+            onRemoved(0, oldItems.size());
+        } else {
             new DiffAsyncTask<>(this).execute(oldItems, list);
         }
     }
 
 
-    public void insert(List<T> list){
-        insert(items.size(),list);
-    }
-    public void insert(int position, List<T> list){
-        if(list==null||list.size()==0){
-            return;
-        }
-        items.add(position,list);
-        onInserted(position,list.size());
+    public void insert(List<T> list) {
+        insert(items.size(), list);
     }
 
-    public void insert(T t){
-        insert(items.size(),t);
+    public void insert(int position, List<T> list) {
+        if (list == null || list.size() == 0) {
+            return;
+        }
+        items.add(position, list);
+        onInserted(position, list.size());
     }
-    public void insert(int position, T t){
-        items.add(position,t);
-        onInserted(position,1);
+
+    public void insert(T t) {
+        insert(items.size(), t);
+    }
+
+    public void insert(int position, T t) {
+        items.add(position, t);
+        onInserted(position, 1);
     }
 
 
     public void setItems(List<T> items) {
         this.items = (List<Object>) items;
     }
+
     public List<T> getItems() {
         return (List<T>) items;
     }
 
     @Override
     public void onInserted(int position, int count) {
-        if(callbacks!=null){
-            for (ListUpdateCallback callback:
+        if (callbacks != null) {
+            for (ListUpdateCallback callback :
                     callbacks
                     ) {
-                callback.onInserted(position,count);
+                callback.onInserted(position, count);
             }
         }
     }
 
     @Override
     public void onRemoved(int position, int count) {
-        if(callbacks!=null){
-            for (ListUpdateCallback callback:
+        if (callbacks != null) {
+            for (ListUpdateCallback callback :
                     callbacks
                     ) {
-                callback.onRemoved(position,count);
+                callback.onRemoved(position, count);
             }
         }
     }
 
     @Override
     public void onMoved(int fromPosition, int toPosition) {
-        if(callbacks!=null){
-            for (ListUpdateCallback callback:
+        if (callbacks != null) {
+            for (ListUpdateCallback callback :
                     callbacks
                     ) {
-                callback.onMoved(fromPosition,toPosition);
+                callback.onMoved(fromPosition, toPosition);
             }
         }
     }
 
     @Override
     public void onChanged(int position, int count, Object payload) {
-        if(callbacks!=null){
-            for (ListUpdateCallback callback:
+        if (callbacks != null) {
+            for (ListUpdateCallback callback :
                     callbacks
                     ) {
-                callback.onChanged(position,count,payload);
+                callback.onChanged(position, count, payload);
             }
         }
     }
@@ -169,16 +172,17 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
     public void attachWithBound(RecyclerView recyclerView) {
         recyclerView.setAdapter(new DataBoundAdapter(this));
     }
-    public void attach(ListAdapter adapter,RecyclerView recyclerView){
+
+    public void attach(ListAdapter adapter, RecyclerView recyclerView) {
         adapter.setListPresenter(this);
         recyclerView.setAdapter(adapter);
     }
 
-    public void addViewBinder(int type, ViewBinder viewBinder){
-        mPool.register(type,viewBinder);
+    public void addViewBinder(int type, ViewBinder viewBinder) {
+        mPool.register(type, viewBinder);
     }
 
-    public  interface DiffCallback<T>{
+    public interface DiffCallback<T> {
         boolean areItemsTheSame(T oldItem, T newItem);
 
         boolean areContentsTheSame(T oldItem, T newItem);
@@ -193,7 +197,7 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
         this.mDiffCallback = diffCallback;
     }
 
-    public static <T>Builder<T> create(){
+    public static <T> Builder<T> create() {
         return new Builder<T>();
     }
 
@@ -201,7 +205,7 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
         int getItemViewType(T item);
     }
 
-    public static class DiffAsyncTask<T> extends AsyncTask<List<T>,Integer,DiffUtil.DiffResult> {
+    public static class DiffAsyncTask<T> extends AsyncTask<List<T>, Integer, DiffUtil.DiffResult> {
         WeakReference<ListPresenter<T>> presenterRef;
 
         public DiffAsyncTask(ListPresenter<T> presenter) {
@@ -211,7 +215,7 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
         @Override
         protected DiffUtil.DiffResult doInBackground(List<T>[] lists) {
             final ListPresenter<T> presenter = presenterRef.get();
-            if(presenter==null){
+            if (presenter == null) {
                 return null;
             }
             final List<T> oldItems = lists[0];
@@ -229,12 +233,12 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
 
                 @Override
                 public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
-                    return presenter.areItemsTheSame(oldItems.get(oldItemPosition),newItems.get(newItemPosition));
+                    return presenter.areItemsTheSame(oldItems.get(oldItemPosition), newItems.get(newItemPosition));
                 }
 
                 @Override
                 public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
-                    return presenter.areContentsTheSame(oldItems.get(oldItemPosition),newItems.get(newItemPosition));
+                    return presenter.areContentsTheSame(oldItems.get(oldItemPosition), newItems.get(newItemPosition));
                 }
             });
         }
@@ -242,44 +246,42 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
         @Override
         protected void onPostExecute(DiffUtil.DiffResult diffResult) {
             final ListPresenter<T> presenter = presenterRef.get();
-            if(presenter==null||diffResult==null){
-                return ;
+            if (presenter == null || diffResult == null) {
+                return;
             }
             diffResult.dispatchUpdatesTo(presenter);
         }
     }
 
 
-
-
-
-
-    public static class Builder<T>{
+    public static class Builder<T> {
 
         private ListPresenter<T> presenter;
         private ListAdapter adapter;
 
-        public Builder(){
+        public Builder() {
             this.presenter = new ListPresenter<>();
         }
-        public Builder<T> addViewBinder(int type, ViewBinder viewBinder){
-            presenter.addViewBinder(type,viewBinder);
+
+        public Builder<T> addViewBinder(int type, ViewBinder viewBinder) {
+            presenter.addViewBinder(type, viewBinder);
             return this;
         }
 
-        public Builder<T>  typeStrategy(TypeStrategy typeStrategy){
+        public Builder<T> typeStrategy(TypeStrategy typeStrategy) {
             presenter.setTypeStrategy(typeStrategy);
             return this;
         }
 
-        public Builder<T>  diffCallback(DiffCallback<T> diffCallback){
+        public Builder<T> diffCallback(DiffCallback<T> diffCallback) {
             presenter.setDiffCallback(diffCallback);
             return this;
         }
-        public ListPresenter<T> attach(RecyclerView recyclerView){
-            if(adapter == null){
+
+        public ListPresenter<T> attach(RecyclerView recyclerView) {
+            if (adapter == null) {
                 adapter = new ListAdapter(presenter);
-            }else {
+            } else {
                 adapter.setListPresenter(presenter);
             }
             recyclerView.setAdapter(adapter);
@@ -287,16 +289,15 @@ public class ListPresenter<T>  implements ListUpdateCallback  {
         }
 
 
-        public ListPresenter attachWithBound(RecyclerView recyclerView){
-            if(adapter == null){
+        public ListPresenter attachWithBound(RecyclerView recyclerView) {
+            if (adapter == null) {
                 adapter = new DataBoundAdapter(presenter);
-            }else {
+            } else {
                 adapter.setListPresenter(presenter);
             }
             recyclerView.setAdapter(adapter);
             return presenter;
         }
-
 
 
     }
