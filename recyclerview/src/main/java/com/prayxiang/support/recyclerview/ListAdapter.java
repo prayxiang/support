@@ -51,6 +51,7 @@ public class ListAdapter extends RecyclerView.Adapter<ViewHolder> {
         }
         ViewBinder binder = mPresenter.findViewBinder(viewType);
         binder.adapter = this;
+        binder.presenter = mPresenter;
         assert inflater != null;
         return binder.onCreateViewHolder(inflater, parent);
     }

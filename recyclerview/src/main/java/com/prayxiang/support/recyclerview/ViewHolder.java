@@ -31,7 +31,7 @@ public class ViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setItem(Object object) {
-        this.object = object;
+        this.item = object;
     }
 
     @SuppressWarnings("all")
