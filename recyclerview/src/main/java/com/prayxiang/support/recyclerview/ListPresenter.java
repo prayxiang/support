@@ -74,7 +74,7 @@ public class ListPresenter<T> implements ListUpdateCallback {
     }
 
 
-    public void display(List<T> list) {
+    public ListPresenter<T> display(List<T> list) {
         List<T> oldItems = getItems();
         if (list == null) {
             list = Collections.emptyList();
@@ -88,6 +88,7 @@ public class ListPresenter<T> implements ListUpdateCallback {
         } else {
             new DiffAsyncTask<>(this).execute(oldItems, list);
         }
+        return this;
     }
 
 
@@ -111,6 +112,20 @@ public class ListPresenter<T> implements ListUpdateCallback {
         items.add(position, t);
         onInserted(position, 1);
     }
+
+
+    public void remove(int position){
+        items.remove(position);
+        onRemoved(position,1);
+    }
+
+    public void remove(Object o){
+        int position = items.indexOf(o);
+        if(position!=-1){
+            remove(position);
+        }
+    }
+
 
 
     public void setItems(List<T> items) {
@@ -289,7 +304,7 @@ public class ListPresenter<T> implements ListUpdateCallback {
         }
 
 
-        public ListPresenter attachWithBound(RecyclerView recyclerView) {
+        public ListPresenter<T> attachWithBound(RecyclerView recyclerView) {
             if (adapter == null) {
                 adapter = new DataBoundAdapter(presenter);
             } else {

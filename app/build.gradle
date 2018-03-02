@@ -36,5 +36,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 //    compile project(path: ':recyclerview')
-    compile 'com.prayxiang.support:recyclerview:1.1.8'
+    compile 'com.prayxiang.support:recyclerview:1.0.0'
 }

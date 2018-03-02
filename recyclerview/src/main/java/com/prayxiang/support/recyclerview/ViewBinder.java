@@ -15,8 +15,13 @@ public class ViewBinder<T, V extends ViewHolder> {
 
     ListAdapter adapter;
 
+    ListPresenter presenter;
     public ListAdapter getAdapter() {
         return adapter;
+    }
+
+    public ListPresenter getPresenter() {
+        return presenter;
     }
 
     public V onCreateViewHolder(LayoutInflater inflater, ViewGroup parent) {
